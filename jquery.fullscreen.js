@@ -4,15 +4,14 @@
  * CopyRight 2014 Prabin Giri
  *  
  * Download Source: 
- *   https://github.com/prabeengiri/Persistent-Folder-Tree-Accordion/archive/master.zip
+ *   https://github.com/prabeengiri/jquery_fullscreen/archive/master.zip
  * Depends:
  *   jQuery.js
  * 
- * This Javacsript creates the clickable accordion with Javascript that
- * opens/and closes the lists. Its basically designed for the folder tree.
- * 
- * It also saves the state in the cookie. When visited next time, based 
- * on the previous open/close state, it will open or close the folders.  
+ * This Fullscreen Plugin will expand the selected element to fullscreen
+ * with close button at the top. It does not clone and append the 
+ * fullscreen element like Lighbox, ModalBox. It can be perfectly used with
+ * Iframes. It does not reload the iframes.
  */
 (function($) {
   
@@ -21,6 +20,14 @@
     this.settings = $.extend({}, this.defaults, options);
     this.fullScreenElement = el;
     this.init();
+    this.fullScreenMode = false;
+    var self = this;
+    
+    // Attache Keydown event. 
+    $(document).on('keydown' , function(e) {
+      self.keyDown(e); 
+    }); 
+    
   };
   
   // Extend Fullscreen Object.
@@ -30,24 +37,27 @@
       cancel : null,
       title : function(fullScreenElement) {
         return null;
-      }
+      },
+      //Activates fullscreen when CTRL + F key is pressed.
+      controlF : false
     },
     
-    /**
-     * Initialize the fullscreen Object.
-     */
     init : function () {
+      this.showAll();
+    },
+    
+    showAll : function() {
       this.showFullScreen();
       this.showCloseUI();
+      this.fullScreenMode = true;
     },
     
-    /**
-     * Create the Fullscreen close UI.
-     * Css for all the elements is defined in the CSS file.
-     * 
-     * On close we have the rever the Fullscreens element's position
-     * and hide the close bar. 
-     */
+    hideAll: function () {
+      this.hideCloseUI();
+      this.hideFullScreen();
+      this.fullScreenModel = false;
+    },
+    
     showCloseUI : function () {
       var self = this;
       $("<div>", { 
@@ -59,8 +69,7 @@
       .append("<span class='fullscreen-close-text'>Exit Fullscreen</span>") 
       .slideDown('slow', function() {
         $(this).click(function () {
-          self.hideCloseUI();
-          self.hideFullScreen();
+          self.hideAll();
         });
       });
       
@@ -68,9 +77,7 @@
       $('html,body').css({'overflow' : 'hidden'});
     },
     
-    /**
-     * Remove the Close UI from DOM.
-     */
+    // Remove the Close UI from DOM.
     hideCloseUI : function () { 
       $('#fullscreen-close').slideUp('fast', function () { 
         $(this).remove();
@@ -80,21 +87,29 @@
       $('html,body').css({'overflow' : 'auto'});
     },
     
-    /**
-     * DisplayFullscreen element as Fullscreen.
-     * This just changes top,left,position.height, width
-     * attribute of the fullscreen Element.
-     */
     showFullScreen : function() {
       this.fullScreenElement.addClass('fullscreen-active');
     },
     
-    /**
-     * Revert back to the same position.
-     */
     hideFullScreen: function() {
       this.fullScreenElement.toggleClass('fullscreen-active');
     },
+    
+    keyDown : function (e) {
+      // Close when ESC key is pressed and fullscreen mode is on.
+      if (e.keyCode == 27 && this.fullscreenMode) {  
+        this.hideAll(); 
+      }
+      // Open the fullscreen on ctrl + f.
+      else if(e.keyCode == 70 && e.ctrlKey && e.shiftKey && !this.fullscreenMode && this.settings.controlF) { 
+        this.showAll(); 
+      }
+      // If tab is pressed, it puts focus on other elements in DOM which are not being 
+      // displayed and its messes the fullscreen.
+      else if (e.keyCode == 9 && this.fullscreenMode) { 
+        e.preventDefault();
+      } 
+    } 
   };
 
   $.fn.FullScreen = function(options) {
@@ -119,14 +134,4 @@
        }
     });
   };
-
-  $(document).ready(function(){
-    $('.dashboard-fullscreen').click(function(){
-      $(this).parents('.dashboard-iframe-block').find('iframe').FullScreen({
-        title: function(fullScreenElement) {
-          return fullScreenElement.parents('.dashboard-iframe-block').find('.dashboard-iframe-header span:first').attr('data-title'); 
-        }
-      });
-    });  
-  });
 })(jQuery);
