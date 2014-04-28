@@ -1,0 +1,47 @@
+.fullscreen-active {
+  position:fixed; 
+  z-index: 99999999; 
+  top : 40px;
+  left: 0;
+  height : 96% !important;
+  width : 100% !important;
+}
+
+#fullscreen-close {
+  color: #999;
+  height:30px;
+  width:100%;
+  position:fixed;
+  z-index:999999999;
+  top:0;
+  left:0;
+  padding: 11px 0 0px;
+  background: white;
+  background-color: #EEEEEE !important;
+  filter: none;
+  background-repeat:repeat-x;
+  -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.25),inset 0 -1px 0 rgba(0,0,0,0.1);
+  -moz-box-shadow:0 1px 3px rgba(0,0,0,0.25),inset 0 -1px 0 rgba(0,0,0,0.1);
+  box-shadow:0 1px 3px rgba(0,0,0,0.25),inset 0 -1px 0 rgba(0,0,0,0.1);
+  cursor:pointer;
+  word-spacing:0px;
+  color:#005A8C;
+  font-size: 20px;
+  font-weight: bold;
+}
+#fullscreen-close span{
+  font-family: "Georgia",Georgia,serif;
+}
+
+#fullscreen-close:hover { 
+  background-color: #F9F9F9 !important;
+}
+.fullscreen-close-text{
+  float:right;
+  padding-right:20px;
+  font-size:15px;
+}
+.fullscreen-title{
+  padding-left:20px;
+  float:left;
+}

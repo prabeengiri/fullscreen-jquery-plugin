@@ -21,12 +21,6 @@
     this.fullScreenElement = el;
     this.init();
     this.fullScreenMode = false;
-    var self = this;
-    
-    // Attache Keydown event. 
-    $(document).on('keydown' , function(e) {
-      self.keyDown(e); 
-    }); 
     
   };
   
@@ -39,9 +33,13 @@
         return null;
       },
       //Activates fullscreen when CTRL + F key is pressed.
-      controlF : false
+      controlF : false,
+      hidden: function (el) {},
+      shown: function (el) {},
+      exitText: "Exit FullScreen"
     },
     
+    // Show fullscreen when fullscreen icon/link is clicked.
     init : function () {
       this.showAll();
     },
@@ -50,12 +48,19 @@
       this.showFullScreen();
       this.showCloseUI();
       this.fullScreenMode = true;
+      // Expose event.
+      this.settings.shown(this.fullScreenElement);
+      this.fullScreenElement.trigger('onFullScreenShown', [this.fullScreenElement]);  
     },
     
     hideAll: function () {
       this.hideCloseUI();
       this.hideFullScreen();
-      this.fullScreenModel = false;
+      this.fullScreenMode = false;
+      // Expose event.
+      this.settings.hidden(this.fullScreenElement);
+      this.fullScreenElement.trigger('onFullScreenHidden', [this.fullScreenElement]);
+      delete this;
     },
     
     showCloseUI : function () {
@@ -66,7 +71,7 @@
       })
       .appendTo('body')
       .append('<span class="fullscreen-title">' + self.settings.title(self.fullScreenElement) + "</span>")
-      .append("<span class='fullscreen-close-text'>Exit Fullscreen</span>") 
+      .append("<span class='fullscreen-close-text'>" + self.settings.exitTitle + "</span>") 
       .slideDown('slow', function() {
         $(this).click(function () {
           self.hideAll();
@@ -88,6 +93,8 @@
     },
     
     showFullScreen : function() {
+      // @todo What if fullscreenElement has inline height/width and its set 
+      // as !important.
       this.fullScreenElement.addClass('fullscreen-active');
     },
     
@@ -97,16 +104,18 @@
     
     keyDown : function (e) {
       // Close when ESC key is pressed and fullscreen mode is on.
-      if (e.keyCode == 27 && this.fullscreenMode) {  
+      alert(e.keyCode);
+      alert(this.fullScreenMode);
+      if (e.keyCode == 27 && this.fullScreenMode) {  
         this.hideAll(); 
       }
       // Open the fullscreen on ctrl + f.
-      else if(e.keyCode == 70 && e.ctrlKey && e.shiftKey && !this.fullscreenMode && this.settings.controlF) { 
+      else if(e.keyCode == 70 && e.ctrlKey && e.shiftKey && !this.fullScreenMode && this.settings.controlF) { 
         this.showAll(); 
       }
       // If tab is pressed, it puts focus on other elements in DOM which are not being 
       // displayed and its messes the fullscreen.
-      else if (e.keyCode == 9 && this.fullscreenMode) { 
+      else if (e.keyCode == 9 && this.fullScreenMode) { 
         e.preventDefault();
       } 
     } 
