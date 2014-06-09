@@ -18,7 +18,8 @@ $('#fullscreen-link').click(function(){
         .attr('data-title'); 
     },
     // Optional settings
-    //Activates fullscreen when CTRL + F key is pressed.
+    // Activates fullscreen when CTRL + F key is pressed only if there is only one Fullscreen element
+    // in the DOM.
     controlF : false,
     hidden: function (fullScreenElement) {
       fullScreenElement.sibiling('span').show();
