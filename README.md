@@ -21,10 +21,10 @@ $('#fullscreen-link').click(function(){
     //Activates fullscreen when CTRL + F key is pressed.
     controlF : false,
     hidden: function (fullScreenElement) {
-      // Not required nothing to be done once fullscreen element is hidden.
+      fullScreenElement.sibiling('span').show();
     },
     shown: function (fullScreenElement) {
-      // Not required nothing to be done once fullscreen element is shown.
+      fullScreenElement.next('div.test').hide();
     },
     exitTitle: "Exit Fullscreen",
     titleLength: 85
