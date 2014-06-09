@@ -8,7 +8,7 @@ This is a simple jQuery plugin which sets any HTML element as fullscreen by chan
 ```javascript
 $('#fullscreen-link').click(function(){
   $('#iframe,#content-block').FullScreen({
-    // This options has to be implemented if 'title' is required on the header when fullscreen mode is on.
+    // This option has to be implemented if 'title' is required on the header when fullscreen mode is on.
     title: function(fullScreenElement) {
       if (!fullScreenElement.parents('.dashboard-iframe-block').find('.dashboard-iframe-header span:first')) {
         throw new Error("Require element to display fullscreen title is not found.")
