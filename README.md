@@ -22,7 +22,7 @@ $('#fullscreen-link').click(function(){
       // Not required nothing to be done once fullscreen element is hidden.
     },
     shown: function (fullScreenElement) {
-      // Not required nothing to be done once fullscreen element is hidden.
+      // Not required nothing to be done once fullscreen element is shown.
     },
     exitTitle: "Exit Fullscreen",
     titleLength: 85
