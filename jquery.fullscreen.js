@@ -36,7 +36,8 @@
       controlF : false,
       hidden: function (el) {},
       shown: function (el) {},
-      exitText: "Exit FullScreen"
+      exitTitle: "Exit Fullscreen",
+      titleLength: 85
     },
     
     // Show fullscreen when fullscreen icon/link is clicked.
@@ -44,6 +45,7 @@
       this.showAll();
     },
     
+    // Display fullscreen and exit bar.
     showAll : function() {
       this.showFullScreen();
       this.showCloseUI();
@@ -60,17 +62,19 @@
       // Expose event.
       this.settings.hidden(this.fullScreenElement);
       this.fullScreenElement.trigger('onFullScreenHidden', [this.fullScreenElement]);
-      delete this;
+
     },
     
     showCloseUI : function () {
       var self = this;
+      var title = this.trimTitle ( self.settings.title(self.fullScreenElement) );
+      
       $("<div>", { 
         'id' : 'fullscreen-close',
         'align' : "center"
       })
       .appendTo('body')
-      .append('<span class="fullscreen-title">' + self.settings.title(self.fullScreenElement) + "</span>")
+      .append('<span class="fullscreen-title">' + title + "</span>")
       .append("<span class='fullscreen-close-text'>" + self.settings.exitTitle + "</span>") 
       .slideDown('slow', function() {
         $(this).click(function () {
@@ -80,6 +84,14 @@
       
       // Hide ScrollBar.
       $('html,body').css({'overflow' : 'hidden'});
+    },
+    
+    // Trim title if its too long with dots.
+    trimTitle : function (title) {
+      if (title.length > this.settings.titleLength) {
+        return title.substring(0, this.settings.titleLength) + " ...";
+      }
+      return title;
     },
     
     // Remove the Close UI from DOM.
@@ -94,7 +106,7 @@
     
     showFullScreen : function() {
       // @todo What if fullscreenElement has inline height/width and its set 
-      // as !important.
+      // as important.
       this.fullScreenElement.addClass('fullscreen-active');
     },
     
@@ -104,8 +116,6 @@
     
     keyDown : function (e) {
       // Close when ESC key is pressed and fullscreen mode is on.
-      alert(e.keyCode);
-      alert(this.fullScreenMode);
       if (e.keyCode == 27 && this.fullScreenMode) {  
         this.hideAll(); 
       }
@@ -124,23 +134,5 @@
   $.fn.FullScreen = function(options) {
     new FullScreen(this, options);
     return this;
-  };
-  
-  /**
-   * IE has window.resize bug which gets fired everytime the element on the 
-   * DOM is resized, to get rid of this problem we are creating own
-   * resize handler 
-   */
-   window.onWindowResize = function (callback) {
-     var width = $(window).width(), height = $(window).height();
-     $(window).resize(function() {
-       var newWidth = $(window).width(),
-         newHeight = $(window).height();
-       if (newWidth !== width || newHeight !== height) {
-         width = newWidth;
-         height = newHeight;
-         callback();
-       }
-    });
   };
 })(jQuery);
