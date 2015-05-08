@@ -1,0 +1,17 @@
+{
+    "name": "etgphh7/fullscreen-jquery-plugin",
+    "description": "Makes HTML elements fullscreen by changing height and width without recreating the element again.",
+    "require": {
+        "components/jquery": ">1.9"
+    },
+    "require-dev": {
+        "components/jquery": ">1.9"
+    },
+    "authors": [
+        {
+            "name": "PrabeenGiri",
+            "email": "prabingiri@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
