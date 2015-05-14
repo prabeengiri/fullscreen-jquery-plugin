@@ -17,6 +17,11 @@
   
   // Construct the Fullscreen Object.
   var FullScreen = function (el, options) {
+	
+	if (el.size() == 0) {
+		throw new Error("FullScreen element not found in current context.");
+		return;
+	}
     this.settings = $.extend({}, this.defaults, options);
     this.fullScreenElement = el;
     this.init();
